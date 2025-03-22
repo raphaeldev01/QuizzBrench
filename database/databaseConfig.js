@@ -2,13 +2,13 @@ const firebase = require("firebase/app");
 const firestore = require("firebase/firestore")
 
 const firebaseConfig = {
-    apiKey: "AIzaSyC73_Q18eXzefOQHD_4E4lVWXa7NCDPf9U",
-    authDomain: "quizz-ebd91.firebaseapp.com",
-    projectId: "quizz-ebd91",
-    storageBucket: "quizz-ebd91.firebasestorage.app",
-    messagingSenderId: "15813553852",
-    appId: "1:15813553852:web:bf597c639329446dd76ab9",
-    measurementId: "G-JV02HWE4S9"
+    apiKey: process.env.apiKey ,
+    authDomain: process.env.authDomain ,
+    projectId: process.env.projectId ,
+    storageBucket: process.env.storageBucket ,
+    messagingSenderId: process.env.measurementId ,
+    appId: process.env.appId ,
+    measurementId: process.env.measurementId 
   };
 
 const app = firebase.initializeApp(firebaseConfig)
