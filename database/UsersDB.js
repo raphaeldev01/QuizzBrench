@@ -26,10 +26,12 @@ const NewUser = async (userInfos) => {
       quizCreated: [],
       coins: 3
     }  
+    const token = jwt.sign({id: userInfos.userId}, process.env.JWT_SECRET, {expiresIn: "3h"})
+
   
     try{
       addDoc(collectionUsers, obj)
-      return {error: false, msg: "User added!"}
+      return {error: false, msg: "User added!", token}
     }catch (err) {
       return {error: true, msg: err}
     }
@@ -45,7 +47,7 @@ const LoginUser = async (userInfos) => {
     const passCorrect = await bcrypt.compare(userInfos.password, userData.password)
 
     if(passCorrect) {
-      const token = jwt.sign({id: userInfos.userId}, process.env.JWT_SECRET, {expiresIn: "1h"})
+      const token = jwt.sign({id: userInfos.userId}, process.env.JWT_SECRET, {expiresIn: "3h"})
       return {error: false, message: "ok", token}
     }
     else {

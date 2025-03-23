@@ -9,11 +9,13 @@ router.post("/newUser", async (req, res) => {
     const response = await userDB.NewUser(infos)
 
     if(response.error) {
-        res.status(400).send(response)
+        res.status(401).send(response)
     } else {
         res.send(response)
     }
 })
+
+router.post
 
 router.post("/loginUser", async (req, res) => {
     const infos = req.body;
@@ -21,7 +23,7 @@ router.post("/loginUser", async (req, res) => {
     const response = await userDB.LoginUser(infos)
 
     if(response.error) {
-        res.status(400).send(response)
+        res.status(401).send(response)
     } else {
         res.send(response)
     }
