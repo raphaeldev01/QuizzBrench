@@ -4,6 +4,7 @@ const { getDoc, where, doc, collection, query, getDocs, setDoc, addDoc, updateDo
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const { addPopularity } = require("./QuizzDB")
+const { SenderEmailForget } = require("../funcions/sendEmail")
 
 const collectionUsers = collection(Database, "users")
 
@@ -60,6 +61,68 @@ const LoginUser = async (userInfos) => {
   }
 }
 
+const forgetPassword = async (email) => {
+  const userSnap = ((await getDocs(query(collectionUsers, where("email", "==", email)))).docs)
+
+  if (userSnap.length > 0) {
+    const user = userSnap[0].data()
+    const code = Math.floor(Math.random() * 99999).toString().padStart(5, "0")
+    const dateGen = new Date()
+
+    try {
+      updateDoc(userSnap[0].ref, {
+        verifyCode: {
+          code,
+          dateGen
+        }
+      })
+      SenderEmailForget(email, user.userId, code)
+      return { error: false, msg: "" }
+    } catch (err) {
+      return { error: true, msg: err }
+    }
+  } else {
+    return { error: true, msg: "Email non-existent" }
+  }
+}
+
+const resetPasswordForgot = async (email, code, password) => {
+  const userSnap = ((await getDocs(query(collectionUsers, where("email", "==", email)))).docs)
+
+  
+
+  if (userSnap.length > 0) {
+    const user = userSnap[0].data()
+    const date = new Date()
+    const dateGen = new Date(user.verifyCode.dateGen * 1000) 
+    const verifyCode = user.verifyCode
+
+  
+    
+
+    if (verifyCode.code === code && (date - dateGen) < 600000) {
+      console.log('oi');
+      
+      try {
+        updateDoc(userSnap[0].ref, {
+          password: await bcrypt.hash(password, 10),
+        })
+        return { error: false, msg: "" }
+      } catch (err) {
+        console.log(err);
+        
+        return { error: true, msg: err }
+      }
+    } else {
+      return { error: true, msg: "Code incorrect or expired" }
+    }
+
+  } else {
+    return { error: true, msg: "Email non-existent" }
+  }
+}
+
+// resetPasswordForgot("raphael.developer@hotmail.com", "73104", "admin").then(console.log)
 
 const AddQuizOnUserHistory = async (user, obj) => {
   const userSnap = (await getDocs(query(collectionUsers, where("userId", "==", user)))).docs
@@ -94,13 +157,17 @@ const GetHistoryUser = async (userId) => {
   }
 }
 
+console.log(Math.floor(Math.random() * 99999).toString().padStart(5, "0"))
+
 // GetHistoryUser("raphael").then(console.log)
 
 module.exports = {
   NewUser,
   LoginUser,
   AddQuizOnUserHistory,
-  GetHistoryUser
+  GetHistoryUser,
+  forgetPassword,
+  resetPasswordForgot
 }
 
 // ===========================
