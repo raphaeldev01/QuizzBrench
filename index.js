@@ -28,6 +28,10 @@ const authMiddleware = (req, res, next) => {
 app.use(cors())
 app.use(express.json())
 
+app.get("/", (req, res) => {    
+    res.send("API ONLINE")
+})
+
 app.use("/auth", authRouter)
 
 app.use(authMiddleware)
