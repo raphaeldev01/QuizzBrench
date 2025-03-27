@@ -5,6 +5,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors")
 const jwt = require("jsonwebtoken")
+const path = require("path");
 
 // ROUTERS
 const authRouter = require("./routers/auth")
@@ -24,13 +25,39 @@ const authMiddleware = (req, res, next) => {
         }
 }
 
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    
+    if (req.method === "OPTIONS") {
+      return res.status(200).end();
+    }
+  
+    next();
+  });
+
 // MIDLE 
-app.use(cors())
+app.use(cors({
+    origin: "*", // Aceita requisições de qualquer origem
+    methods: "GET,POST,PUT,DELETE",
+    allowedHeaders: "Content-Type,Authorization"
+}))
+
 app.use(express.json())
 
-app.get("/", (req, res) => {    
-    res.send("API ONLINE")
-})
+app.use(express.static(path.join(__dirname, "build")));
+app.get("*", (req, res, next) => {
+    if(req.url.includes("/auth") || req.url.includes("/quizz") || req.url.includes("/user")) {
+        console.log("URL");
+        
+        return next();
+    }else {
+        res.sendFile(path.join(__dirname, "build", "index.html"));
+    }
+
+});
+
 
 app.use("/auth", authRouter)
 
