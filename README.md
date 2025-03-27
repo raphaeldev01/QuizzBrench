@@ -40,16 +40,20 @@ Este é um projeto fullstack de uma página de quiz, onde os usuários podem res
 
 ### 1. Clonar o Repositório
 Primeiro, clone o repositório:
-
-- ` git clone https://github.com/seu-usuario/quiz-app.git `
+```
+git clone https://github.com/seu-usuario/quiz-app.git
+```
 
 
 ### 2. Instalar Dependências do Backend
 Entre na pasta e instale as dependências:
 
-- `cd backend `
-- `npm install`
-
+```
+cd backend
+```
+```
+npm install
+```
 ### 4. Configurar o Banco de Dados
 
 - Crie um projeto: Acesse o [Firebase](http://console.firebase.google.com/), crie uma conta e um novo projeto.
@@ -74,14 +78,14 @@ messagingSenderId= your-messaging-sender
 ### 5. Rodar a aplicação
 execute:
 
-`node .`
-
+```
+node .
+```
 ### 6. Aplicação online
 
 Aplicação rodando na porta [5000](http://localhost:5000) do seu pc
 
-### Fique a vontade para contribuir! 
+## Fique a vontade para contribuir! 
 
-#
 
 Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
